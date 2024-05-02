@@ -193,8 +193,7 @@ public class ListaContactos {
 	@Override
 	public String toString() {
 		String cadena="";
-		int cont;
-		cont=0;
+		int cont=0;
 		NodoTemporal aux = lista;
 		for(cont=1; cont<size; cont++) {
 			cadena += aux.getFecha().getFecha().toString();
