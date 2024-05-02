@@ -41,7 +41,6 @@ public class ListaContactos {
 		}
 		return null;
 	}
-
 	private void handleInsertion(NodoTemporal aux, NodoTemporal ant, PosicionPersona p, boolean encontrado) {
 		if (aux != null) {
 			// Node found, insert into coordinates list
@@ -76,7 +75,6 @@ public class ListaContactos {
 				npAnt.setSiguiente(npNuevo);
 		}
 	}
-
 	private void insertNewNode(NodoTemporal ant, PosicionPersona p) {
 		NodoTemporal nuevo = new NodoTemporal();
 		nuevo.setFecha(p.getFechaPosicion());
@@ -111,7 +109,6 @@ public class ListaContactos {
 			lista = nuevo;
 		}
 	}
-
 
 
 	public int personasEnCoordenadas () {
