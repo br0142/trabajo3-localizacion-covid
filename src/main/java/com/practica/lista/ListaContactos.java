@@ -13,102 +13,7 @@ public class ListaContactos {
 	 * En la lista de coordenadas metemos el documento de la persona que está en esa coordenada 
 	 * en un instante 
 	 */
-	public void insertarNodoTemporal(PosicionPersona p) {
-		NodoTemporal aux = lista, ant = null;
-		boolean encontrado = false;
 
-		// Find the appropriate position in the list
-		aux = findPosition(aux, p, ant);
-
-		// Handle insertion
-		handleInsertion(aux, ant, p, encontrado);
-	}
-
-	private NodoTemporal findPosition(NodoTemporal aux, PosicionPersona p, NodoTemporal ant) {
-		boolean salir = false;
-
-		while (aux != null && !salir) {
-			if (aux.getFecha().compareTo(p.getFechaPosicion()) == 0) {
-				// Node found
-				return aux;
-			} else if (aux.getFecha().compareTo(p.getFechaPosicion()) < 0) {
-				ant = aux;
-				aux = aux.getSiguiente();
-			} else if (aux.getFecha().compareTo(p.getFechaPosicion()) > 0) {
-				// Node not found
-				salir = true;
-			}
-		}
-		return null;
-	}
-	private void handleInsertion(NodoTemporal aux, NodoTemporal ant, PosicionPersona p, boolean encontrado) {
-		if (aux != null) {
-			// Node found, insert into coordinates list
-			insertIntoCoordinatesList(aux, p);
-		} else {
-			// Node not found, create a new node and insert it into the list
-			insertNewNode(ant, p);
-			this.size++;
-		}
-	}
-
-	private void insertIntoCoordinatesList(NodoTemporal aux, PosicionPersona p) {
-		NodoPosicion npActual = aux.getListaCoordenadas();
-		NodoPosicion npAnt = null;
-		boolean npEncontrado = false;
-
-		while (npActual != null && !npEncontrado) {
-			if (npActual.getCoordenada().equals(p.getCoordenada())) {
-				npEncontrado = true;
-				npActual.setNumPersonas(npActual.getNumPersonas() + 1);
-			} else {
-				npAnt = npActual;
-				npActual = npActual.getSiguiente();
-			}
-		}
-
-		if (!npEncontrado) {
-			NodoPosicion npNuevo = new NodoPosicion(p.getCoordenada(), 1, null);
-			if (aux.getListaCoordenadas() == null)
-				aux.setListaCoordenadas(npNuevo);
-			else
-				npAnt.setSiguiente(npNuevo);
-		}
-	}
-	private void insertNewNode(NodoTemporal ant, PosicionPersona p) {
-		NodoTemporal nuevo = new NodoTemporal();
-		nuevo.setFecha(p.getFechaPosicion());
-
-		NodoPosicion npActual = nuevo.getListaCoordenadas();
-		NodoPosicion npAnt = null;
-		boolean npEncontrado = false;
-
-		while (npActual != null && !npEncontrado) {
-			if (npActual.getCoordenada().equals(p.getCoordenada())) {
-				npEncontrado = true;
-				npActual.setNumPersonas(npActual.getNumPersonas() + 1);
-			} else {
-				npAnt = npActual;
-				npActual = npActual.getSiguiente();
-			}
-		}
-
-		if (!npEncontrado) {
-			NodoPosicion npNuevo = new NodoPosicion(p.getCoordenada(), 1, null);
-			if (nuevo.getListaCoordenadas() == null)
-				nuevo.setListaCoordenadas(npNuevo);
-			else
-				npAnt.setSiguiente(npNuevo);
-		}
-
-		if (ant != null) {
-			nuevo.setSiguiente(ant.getSiguiente());
-			ant.setSiguiente(nuevo);
-		} else {
-			nuevo.setSiguiente(lista);
-			lista = nuevo;
-		}
-	}
 
 
 	public int personasEnCoordenadas () {
@@ -184,9 +89,101 @@ public class ListaContactos {
 		}
 		return cont;
 	}
-	
-	
-	
+
+	public void insertarNodoTemporal(PosicionPersona p) {
+		NodoTemporal aux = lista;
+		NodoTemporal ant = null;
+		boolean encontrado = false;
+
+		// Find the appropriate position in the list
+		while (aux != null && !encontrado) {
+			int comparisonResult = aux.getFecha().compareTo(p.getFechaPosicion());
+			if (comparisonResult == 0) {
+				encontrado = true;
+			} else if (comparisonResult < 0) {
+				ant = aux;
+				aux = aux.getSiguiente();
+			} else {
+				break;
+			}
+		}
+
+		// Handle insertion
+		if (encontrado) {
+			insertIntoCoordinatesList(aux, p);
+		} else {
+			insertNewNode(ant, p);
+			this.size++;
+		}
+	}
+
+	private void insertIntoCoordinatesList(NodoTemporal aux, PosicionPersona p) {
+		NodoPosicion npActual = aux.getListaCoordenadas();
+		NodoPosicion npAnt = null;
+		boolean npEncontrado = false;
+
+		// Find the appropriate position in the coordinates list
+		while (npActual != null && !npEncontrado) {
+			if (npActual.getCoordenada().equals(p.getCoordenada())) {
+				npEncontrado = true;
+				npActual.setNumPersonas(npActual.getNumPersonas() + 1);
+			} else {
+				npAnt = npActual;
+				npActual = npActual.getSiguiente();
+			}
+		}
+
+		// Insert into the coordinates list
+		if (!npEncontrado) {
+			NodoPosicion npNuevo = new NodoPosicion(p.getCoordenada(), 1, null);
+			if (aux.getListaCoordenadas() == null) {
+				aux.setListaCoordenadas(npNuevo);
+			} else {
+				npAnt.setSiguiente(npNuevo);
+			}
+		}
+	}
+
+	private void insertNewNode(NodoTemporal ant, PosicionPersona p) {
+		NodoTemporal nuevo = new NodoTemporal();
+		nuevo.setFecha(p.getFechaPosicion());
+
+		NodoPosicion npActual = nuevo.getListaCoordenadas();
+		NodoPosicion npAnt = null;
+		boolean npEncontrado = false;
+
+		// Find the appropriate position in the coordinates list
+		while (npActual != null && !npEncontrado) {
+			if (npActual.getCoordenada().equals(p.getCoordenada())) {
+				npEncontrado = true;
+				npActual.setNumPersonas(npActual.getNumPersonas() + 1);
+			} else {
+				npAnt = npActual;
+				npActual = npActual.getSiguiente();
+			}
+		}
+
+		// Insert into the coordinates list
+		if (!npEncontrado) {
+			NodoPosicion npNuevo = new NodoPosicion(p.getCoordenada(), 1, null);
+			if (nuevo.getListaCoordenadas() == null) {
+				nuevo.setListaCoordenadas(npNuevo);
+			} else {
+				npAnt.setSiguiente(npNuevo);
+			}
+		}
+
+		// Insert the new node into the main list
+		if (ant != null) {
+			nuevo.setSiguiente(ant.getSiguiente());
+			ant.setSiguiente(nuevo);
+		} else {
+			nuevo.setSiguiente(lista);
+			lista = nuevo;
+		}
+	}
+
+
 	@Override
 	public String toString() {
 		String cadena="";
