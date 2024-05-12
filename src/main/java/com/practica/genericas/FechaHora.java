@@ -1,7 +1,6 @@
 package com.practica.genericas;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class FechaHora implements Comparable<FechaHora>{

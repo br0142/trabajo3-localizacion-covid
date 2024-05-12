@@ -176,7 +176,6 @@ public class ListaContactos {
 	}
 
 
-
 	@Override
 	public String toString() {
 		String cadena="";
